@@ -103,6 +103,6 @@ public class HIBPConnectorConfig implements IdentityConnectorConfig {
     @Override
     public Map<String, String> getDefaultPropertyValues(String[] strings, String s) throws IdentityGovernanceException {
 
-        return null;
+        return new HashMap<>();
     }
 }
