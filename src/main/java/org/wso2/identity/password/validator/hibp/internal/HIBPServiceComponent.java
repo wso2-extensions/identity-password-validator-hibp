@@ -57,7 +57,7 @@ public class HIBPServiceComponent {
             throw new RuntimeException("Failed to start HIBP component.", e);
         }
 
-        log.info("Successfully stated HIBP compoenent.");
+        log.info("Successfully started HIBP component.");
     }
 
     @Reference(

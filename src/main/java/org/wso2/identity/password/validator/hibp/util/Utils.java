@@ -94,7 +94,7 @@ public class Utils {
             }
 
             try (InputStream in = entity.getContent()) {
-                return buildResponseMap(IOUtils.toString(in));
+                return buildResponseMap(IOUtils.toString(in, StandardCharsets.UTF_8));
             }
         }
     }
