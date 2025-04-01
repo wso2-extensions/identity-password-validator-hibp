@@ -22,6 +22,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.base.MultitenantConstants;
+import org.wso2.identity.password.validator.hibp.exception.HIBPException;
 import org.wso2.identity.password.validator.hibp.util.Constants;
 import org.wso2.identity.password.validator.hibp.util.Utils;
 
@@ -56,7 +57,7 @@ public class HIBPServlet extends HttpServlet {
         boolean isEnabled;
         try {
             isEnabled = HIBPService.isHIBPEnabled(tenantDomain);
-        } catch (Exception e) {
+        } catch (HIBPException e) {
             LOG.error("Failed to get status of HIBP connector.", e);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
@@ -94,7 +95,7 @@ public class HIBPServlet extends HttpServlet {
         try {
             passwordAppearanceCount = HIBPService
                     .getPasswordAppearanceCount(request.getParameter(Constants.PASSWORD_PARAM), tenantDomain);
-        } catch (Exception e) {
+        } catch (HIBPException e) {
             LOG.error("Failed to get appearance count for the password.", e);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
