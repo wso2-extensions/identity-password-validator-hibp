@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024, WSO2 LLC. (https://www.wso2.com).
+ * Copyright (c) 2025, WSO2 LLC. (https://www.wso2.com).
  *
  * WSO2 LLC. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -20,6 +20,7 @@ package org.wso2.identity.password.validator.hibp;
 
 import org.apache.commons.lang.StringUtils;
 import org.wso2.carbon.identity.application.common.model.Property;
+import org.wso2.identity.password.validator.hibp.exception.HIBPException;
 import org.wso2.identity.password.validator.hibp.util.Utils;
 
 import java.util.Map;
@@ -34,29 +35,33 @@ public class HIBPService {
      *
      * @param password password.
      * @return appearance count.
-     * @throws Exception in case of failure.
+     * @throws HIBPException in case of failure.
      */
-    public static int getPasswordAppearanceCount(String password, String tenantDomain) throws Exception {
+    public static int getPasswordAppearanceCount(String password, String tenantDomain) throws HIBPException {
 
-        Property[] connectorConfigs = Utils.getConnectorConfiguration(tenantDomain);
+        try {
+            Property[] connectorConfigs = Utils.getConnectorConfiguration(tenantDomain);
 
-        // Connector is not enabled
-        if (connectorConfigs == null || connectorConfigs.length != 2
-                || !Boolean.parseBoolean(connectorConfigs[0].getValue())
-                || StringUtils.isBlank(connectorConfigs[1].getValue())) {
-            return 0;
+            // Connector is not enabled
+            if (connectorConfigs == null || connectorConfigs.length != 2
+                    || !Boolean.parseBoolean(connectorConfigs[0].getValue())
+                    || StringUtils.isBlank(connectorConfigs[1].getValue())) {
+                return 0;
+            }
+
+            String passwordHash = Utils.getSHA1(password);
+            String firstFiveLettersOfHash = passwordHash.substring(0, 5);
+            String remainingLettersOfHash = passwordHash.substring(5);
+
+            Map<String, Integer> appearanceMap = Utils.getHIBPAppearanceMap(connectorConfigs[1].getValue(),
+                    firstFiveLettersOfHash);
+            if (appearanceMap.isEmpty() || !appearanceMap.containsKey(remainingLettersOfHash)) {
+                return 0;
+            }
+            return appearanceMap.get(remainingLettersOfHash);
+        } catch (Exception e) {
+            throw new HIBPException("Error while getting password appearance count", e);
         }
-
-        String passwordHash = Utils.getSHA1(password);
-        String firstFiveLettersOfHash = passwordHash.substring(0, 5);
-        String remainingLettersOfHash = passwordHash.substring(5);
-
-        Map<String, Integer> appearanceMap = Utils.getHIBPAppearanceMap(connectorConfigs[1].getValue(),
-                firstFiveLettersOfHash);
-        if (appearanceMap.isEmpty() || !appearanceMap.containsKey(remainingLettersOfHash)) {
-            return 0;
-        }
-        return appearanceMap.get(remainingLettersOfHash);
     }
 
     /**
@@ -64,17 +69,21 @@ public class HIBPService {
      *
      * @param tenantDomain tenant domain
      * @return true if enabled
-     * @throws Exception in case of failure.
+     * @throws HIBPException in case of failure.
      */
-    public static boolean isHIBPEnabled(String tenantDomain) throws Exception {
+    public static boolean isHIBPEnabled(String tenantDomain) throws HIBPException {
 
-        Property[] connectorConfigs = Utils.getConnectorConfiguration(tenantDomain);
+        try {
+            Property[] connectorConfigs = Utils.getConnectorConfiguration(tenantDomain);
 
-        // Connector is not enabled
-        if (connectorConfigs == null || connectorConfigs.length != 2) {
-            return false;
+            // Connector is not enabled
+            if (connectorConfigs == null || connectorConfigs.length != 2) {
+                return false;
+            }
+
+            return Boolean.parseBoolean(connectorConfigs[0].getValue());
+        } catch (Exception e) {
+            throw new HIBPException("Error while checking if HIBP is enabled", e);
         }
-
-        return Boolean.parseBoolean(connectorConfigs[0].getValue());
     }
 }
