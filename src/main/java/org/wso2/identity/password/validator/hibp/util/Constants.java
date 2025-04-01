@@ -29,22 +29,49 @@ public class Constants {
 
     public static final String COUNT_PARAM = "count";
 
+    /**
+     * Parameter name for enabling/disabling the HIBP validator
+     */
     public static final String ENABLED_PARAM = "enabled";
 
+    /**
+     * Hashing algorithm used for password hashing
+     */
     public static final String SHA1 = "SHA-1";
 
+    /**
+     * HTTP header name for the HIBP API key
+     */
     public static final String HIBP_API_KEY_HEADER = "hibp-api-key";
 
+    /**
+     * Base URL for the HIBP password range API
+     */
     public static final String HIBP_API_URL = "https://api.pwnedpasswords.com/range/";
 
+    /**
+     * Servlet path for the HIBP validator endpoint
+     */
     public static final String HIBP_SERVLET_PATH = "/hibp";
 
+    /**
+     * Name of the HIBP password validator connector
+     */
     public static final String CONNECTOR_NAME = "hibp.password.validator";
 
+    /**
+     * Configuration property name for enabling/disabling the connector
+     */
     public static final String CONNECTOR_ENABLE = CONNECTOR_NAME + ".enable";
 
+    /**
+     * Configuration property name for setting the HIBP API key
+     */
     public static final String CONNECTOR_API_KEY = CONNECTOR_NAME + ".api.key";
 
+    /**
+     * Parameter name for tenant domain
+     */
     public static final String TENANT_DOMAIN = "tenant_domain";
 
 }
