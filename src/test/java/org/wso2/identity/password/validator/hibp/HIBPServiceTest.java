@@ -20,9 +20,6 @@ package org.wso2.identity.password.validator.hibp;
 
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.testng.PowerMockTestCase;
 import org.testng.Assert;
@@ -30,16 +27,12 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.wso2.carbon.identity.application.common.model.Property;
-import org.wso2.identity.password.validator.hibp.internal.HIBPDataHolder;
 import org.wso2.identity.password.validator.hibp.util.Utils;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * Tests for the HIBPService class.
@@ -66,7 +59,6 @@ public class HIBPServiceTest extends PowerMockTestCase {
     public void testGetPasswordAppearanceCount_PasswordBreached() throws Exception {
         // Mocked SHA1 hash for "password123"
         String mockedHash = "CBF8CD1B8FF6840F67D7F5F5A17A4CF0D4B72D62";
-        String firstFive = "CBF8C";
         String remaining = "D1B8FF6840F67D7F5F5A17A4CF0D4B72D62";
         
         // Mock connector configuration
@@ -99,11 +91,10 @@ public class HIBPServiceTest extends PowerMockTestCase {
      */
     @Test
     public void testGetPasswordAppearanceCount_PasswordNotBreached() throws Exception {
+        
         // Mocked SHA1 hash for a strong password
         String mockedHash = "AF5570F5A1810B7AF78CAF4BC70FE44865367892";
-        String firstFive = "AF557";
-        String remaining = "0F5A1810B7AF78CAF4BC70FE44865367892";
-        
+
         // Mock connector configuration
         Property[] connectorConfigs = new Property[2];
         connectorConfigs[0] = new Property();
