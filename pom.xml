@@ -29,10 +29,14 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.identity.password.validator.hibp</artifactId>
-    <packaging>bundle</packaging>
+    <packaging>pom</packaging>
     <name>Have I been pwned connector</name>
     <description>Have I been pwned connector</description>
     <version>1.0.0</version>
+
+    <modules>
+        <module>components/org.wso2.identity.password.validator.hibp</module>
+    </modules>
 
     <distributionManagement>
         <repository>
